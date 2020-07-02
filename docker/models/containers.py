@@ -566,6 +566,8 @@ class ContainerCollection(Collection):
                 :py:class:`Container` object.
             device_cgroup_rules (:py:class:`list`): A list of cgroup rules to
                 apply to the container.
+            device_requests: (:py:class:`list`)a list of requests for devices
+                to be sent to device drivers
             device_read_bps: Limit read rate (bytes per second) from a device
                 in the form of: `[{"Path": "device_path", "Rate": rate}]`
             device_read_iops: Limit read rate (IO per second) from a device.
@@ -993,6 +995,7 @@ RUN_HOST_CONFIG_KWARGS = [
     'cpu_rt_period',
     'cpu_rt_runtime',
     'device_cgroup_rules',
+    'device_requests',
     'device_read_bps',
     'device_read_iops',
     'device_write_bps',

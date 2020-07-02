@@ -203,6 +203,24 @@ class HostConfigTest(unittest.TestCase):
         with pytest.raises(InvalidVersion):
             create_host_config(version='1.24', cpu_rt_runtime=1000)
 
+    def test_create_host_config_with_device_requests(self):
+        device_requests = [{
+            "Driver": "",
+            "Count": -1,
+            "DeviceIDs": None,
+            "Capabilities": [
+                [
+                    "gpu"
+                ]
+            ],
+            "Options": {}
+        }
+        ]
+        config = create_host_config(
+            version='1.40', device_requests = device_requests
+        )
+        assert config.get('DeviceRequests') is device_requests
+
 
 class ContainerSpecTest(unittest.TestCase):
     def test_parse_mounts(self):

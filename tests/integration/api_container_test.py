@@ -478,6 +478,32 @@ class CreateContainerTest(BaseAPIIntegrationTest):
         self.client.start(ctnr)
         assert rule in self.client.logs(ctnr).decode('utf-8')
 
+    @requires_api_version('1.40')
+    def test_create_with_device_requests(self):
+        rule = {
+            "Driver": "",
+            "Count": -1,
+            "DeviceIDs": None,
+            "Capabilities": [
+                [
+                    "gpu"
+                    ]
+                ],
+            "Options": {}
+            }
+
+        ctnr = self.client.create_container(
+            TEST_IMG, 'cat /sys/fs/cgroup/devices/devices.list',
+            host_config=self.client.create_host_config(
+                device_requests=[rule]
+            )
+        )
+        self.tmp_containers.append(ctnr)
+        config = self.client.inspect_container(ctnr)
+        assert config['HostConfig']['DeviceRequests'] == [rule]
+        self.client.start(ctnr)
+        assert rule in self.client.logs(ctnr).decode('utf-8')
+
     def test_create_with_uts_mode(self):
         container = self.client.create_container(
             TEST_IMG, ['echo'], host_config=self.client.create_host_config(
